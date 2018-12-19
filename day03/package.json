@@ -1,0 +1,12 @@
+{
+  "name": "day03",
+  "version": "1.0.0",
+  "description": "Advent of Code day 3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./"
+  },
+  "author": "Daniel Braun",
+  "license": "ISC"
+}
