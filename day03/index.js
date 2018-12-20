@@ -5,16 +5,31 @@ const input = fs
   .toString()
   .split('\n');
 
-const getAnswer1 = input => {
+const getAnswer1 = tempInput => {
   // return a matrix (i think that's the correct term?) of objects
   // to represent a grid with locations and settings
-  const fabricMatrix = returnFabricMatrix(8);
+  const fabricMatrix = returnFabricMatrix(1000);
   // for testing, return values from a test string: '#1 @ 1,3: 4x4'
-  const topLeft = input[0]
+
+  tempInput.forEach(sheetString => {
+    const elfSheet = returnElfSheet(sheetString, fabricMatrix);
+    elfSheet.forEach(id => {
+      fabricMatrix[id].claimCount++;
+    });
+  });
+};
+/**
+ * Return an 'elf sheet', an array of ids that represent
+ * all of the claimed inches of a particular sheet.
+ * @param {string} sheetString
+ * @param {Array} fabricMatrix
+ */
+const returnElfSheet = (sheetString, fabricMatrix) => {
+  const topLeft = sheetString
     .split('@ ')[1]
     .split(':')[0]
     .split(',');
-  const widthHeight = input[0].split(': ')[1].split('x');
+  const widthHeight = sheetString.split(': ')[1].split('x');
 
   // from all the splitting above, we now have a left / top (leftMove / topMOve)
   // corner to begin a claimed rectangle. Additionally we have a width
@@ -26,33 +41,30 @@ const getAnswer1 = input => {
 
   // based on our input, well find a list of 'claimed' objects
   // and push them into here
-  const foundLocationIds = [];
+  const elfSheet = [];
 
   const xCoords = [];
   const yCoords = [];
   for (let i = 0; i < width; i++) {
     xCoords.push(leftMove + 1 + i);
   }
-  console.log(`xCoords: ${xCoords}`);
+  //console.log(`xCoords: ${xCoords}`);
 
   for (let i = 0; i < height; i++) {
     yCoords.push(topMove + 1 + i);
   }
-  console.log(`yCoords: ${yCoords}`);
+  //console.log(`yCoords: ${yCoords}`);
 
   xCoords.forEach(x => {
     yCoords.forEach(y => {
       const foundLocation = fabricMatrix.find(locationObj => {
         return locationObj.x == x && locationObj.y == y;
       });
-      foundLocationIds.push(foundLocation.id);
+      elfSheet.push(foundLocation.id);
     });
   });
-  console.log(foundLocationIds);
-  foundLocationIds.forEach(id => {
-    fabricMatrix[id].claimCount++;
-  });
-  console.log(fabricMatrix);
+  console.log(`len: ${elfSheet.length} elfSheet: `, elfSheet);
+  return elfSheet;
 };
 
 const testInput = ['#1 @ 1,3: 2x3'];
@@ -74,4 +86,4 @@ const returnFabricMatrix = inches => {
   }
   return fabricMatrix;
 };
-getAnswer1(testInput);
+getAnswer1(input.splice(0, 10));
