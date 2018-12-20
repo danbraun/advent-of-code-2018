@@ -17,22 +17,26 @@ const getAnswer1 = (input) => {
 
     const foundLocationIds = [];
 
+    const xCoords = [];
+    const yCoords = [];
     for (let i = 0; i < width; i++) {
-        const foundLocation = fabricMatrix.find( (locationObj) => {
-            const x = leftMove+1;
-            const y = topMove+1
-            return locationObj.x == x+i && locationObj.y == y;
-        })
-        foundLocationIds.push(foundLocation.id);
+        xCoords.push(leftMove+1+i);
     }
+    console.log(`xCoords: ${xCoords}`);
+
     for (let i = 0; i < height; i++) {
-        const foundLocation = fabricMatrix.find( (locationObj) => {
-            const x = leftMove+1;
-            const y = topMove+1
-            return locationObj.x == x && locationObj.y == y+1;
-        })
-        foundLocationIds.push(foundLocation.id);
+        yCoords.push(topMove+1+i);
     }
+    console.log(`yCoords: ${yCoords}`);
+
+    xCoords.forEach( (x) => {
+        yCoords.forEach( (y) => {
+            const foundLocation = fabricMatrix.find( (locationObj) => {
+                return locationObj.x == x && locationObj.y == y;
+            })
+            foundLocationIds.push(foundLocation.id);
+        })
+    })
     console.log(foundLocationIds);
     foundLocationIds.forEach( (id) => {
         fabricMatrix[id].claimCount++;
@@ -42,7 +46,7 @@ const getAnswer1 = (input) => {
 }
 
 const testInput = [
-    '#1 @ 1,3: 4x4'
+    '#1 @ 1,3: 2x3'
 ];
 const returnFabricMatrix = (inches) => {
     const area = inches*inches;
