@@ -28,34 +28,34 @@ const getAnswer1 = input => {
   // and push them into here
   const foundLocationIds = [];
 
-  // loop through a total identified by width and use Array.find
-  // to find the top row of the claimed rectangle
+  const xCoords = [];
+  const yCoords = [];
   for (let i = 0; i < width; i++) {
-    // with each iteration of width, use Array.find to loop though the
-    // entire fabricMatrix array and find location objects in the matrix
-    // that have x's and y's that match x+i (which increases with each iteration
-    // of the above for loop) and y (which for now stays the same)
-    const foundLocation = fabricMatrix.find(locationObj => {
-      // locationObj.x and locationObj.y are 1 based so add one to leftMove / topMove
-      const x = leftMove + 1 + i;
-      const y = topMove + 1;
-      return locationObj.x == x && locationObj.y == y;
-    });
-    //console.log(`foundLocation.id: ${foundLocation.id}`);
-    foundLocationIds.push(foundLocation.id);
+    xCoords.push(leftMove + 1 + i);
   }
+  console.log(`xCoords: ${xCoords}`);
 
+  for (let i = 0; i < height; i++) {
+    yCoords.push(topMove + 1 + i);
+  }
+  console.log(`yCoords: ${yCoords}`);
+
+  xCoords.forEach(x => {
+    yCoords.forEach(y => {
+      const foundLocation = fabricMatrix.find(locationObj => {
+        return locationObj.x == x && locationObj.y == y;
+      });
+      foundLocationIds.push(foundLocation.id);
+    });
+  });
+  console.log(foundLocationIds);
   foundLocationIds.forEach(id => {
     fabricMatrix[id].claimCount++;
   });
-  //console.log(fabricMatrix);
+  console.log(fabricMatrix);
 };
 
-// Find all coords that should be claimed?
-const coordsToClaim = [];
-for (let i = 0; i < width; i++) {}
-
-const testInput = ['#1 @ 1,3: 4x4'];
+const testInput = ['#1 @ 1,3: 2x3'];
 const returnFabricMatrix = inches => {
   const area = inches * inches;
   const fabricMatrix = [];
